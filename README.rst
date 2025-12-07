@@ -1,7 +1,9 @@
-==================
-My fullstack project set up for:
-Fastapi - Nginx - Docker - React TS - SCSS
-==================
+===========================================
+Fullstack Template: FastAPI + React + Nginx
+===========================================
+
+*Production-ready Docker setup with TypeScript and SCSS*
+
 ----
 
 Setup
@@ -73,6 +75,7 @@ Documentation
 =============
 
 Coming soon...
+
 ----
 
 Contributing
