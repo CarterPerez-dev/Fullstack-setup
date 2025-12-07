@@ -1,5 +1,8 @@
+# AngelaMos | 2025
+# dev.compose.yml
+
 venv
-.venv
+*.venv
 *.env
 *.cache
 *.egg
@@ -35,3 +38,4 @@ htmlcov/
 dmypy.json
 
 .DS_Store
+
