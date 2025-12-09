@@ -74,7 +74,32 @@ Run ``just`` to see all available commands.
 Documentation
 =============
 
-Coming soon...
+Comprehensive guides for understanding and customizing this template:
+
+Backend
+-------
+
+- `Backend Architecture <https://github.com/CarterPerez-dev/fullstack-template/blob/documentation/docs/wiki/backend.md>`_
+
+  Complete backend architecture including FastAPI setup, security patterns (JWT + Argon2id), database models, repository pattern, services, API endpoints, testing, and production deployment.
+
+Frontend
+--------
+
+- `Frontend Architecture <https://github.com/CarterPerez-dev/fullstack-template/blob/documentation/docs/wiki/frontend.md>`_
+
+  React 19 + TypeScript architecture with TanStack Query, Zustand state management, complete design system (OKLCH colors), API integration patterns, SCSS utilities, and performance optimizations.
+
+Infrastructure
+--------------
+
+- `Nginx Configuration <https://github.com/CarterPerez-dev/fullstack-template/blob/documentation/docs/wiki/nginx.md>`_
+
+  Reverse proxy setup, rate limiting, WebSocket proxying, caching strategies, security headers, and performance tuning for both development and production.
+
+- `Docker & Compose <https://github.com/CarterPerez-dev/fullstack-template/blob/documentation/docs/wiki/docker.md>`_
+
+  Multi-stage Dockerfiles, health checks, network segmentation, resource limits, security hardening, and complete containerization guide.
 
 ----
 
