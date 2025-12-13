@@ -6,8 +6,8 @@ test_auth.py
 import pytest
 from httpx import AsyncClient
 
-from models.User import User
-from models.RefreshToken import RefreshToken
+from user.User import User
+from auth.RefreshToken import RefreshToken
 
 
 URL_LOGIN = "/v1/auth/login"
