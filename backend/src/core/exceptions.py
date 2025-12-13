@@ -142,14 +142,14 @@ class RateLimitExceeded(BaseAppException):
     """
     def __init__(
         self,
-        message: str = "Rate limit exceeded",
+        message: str = "Calm down a little bit...",
         retry_after: int | None = None,
         extra: dict[str,
                     Any] | None = None,
     ) -> None:
         super().__init__(
             message = message,
-            status_code = 429,
+            status_code = 420,
             extra = extra
         )
         self.retry_after = retry_after
