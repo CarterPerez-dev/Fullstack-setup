@@ -21,7 +21,6 @@ from config import settings
 from core.dependencies import (
     ClientIP,
     CurrentUser,
-    DBSession,
 )
 from core.security import (
     clear_refresh_cookie,
@@ -35,8 +34,8 @@ from .schemas import (
     TokenWithUserResponse,
 )
 from user.schemas import UserResponse
-from .service import AuthService
-from user.service import UserService
+from .dependencies import AuthServiceDep
+from user.dependencies import UserServiceDep
 from core.responses import AUTH_401
 
 
@@ -52,7 +51,7 @@ router = APIRouter(prefix = "/auth", tags = ["auth"])
 async def login(
     request: Request,
     response: Response,
-    db: DBSession,
+    auth_service: AuthServiceDep,
     ip: ClientIP,
     form_data: Annotated[OAuth2PasswordRequestForm,
                          Depends()],
@@ -60,8 +59,7 @@ async def login(
     """
     Login with email and password
     """
-    result, refresh_token = await AuthService.login(
-        db,
+    result, refresh_token = await auth_service.login(
         email=form_data.username,
         password=form_data.password,
         ip_address=ip,
@@ -76,7 +74,7 @@ async def login(
     responses = {**AUTH_401}
 )
 async def refresh_token(
-    db: DBSession,
+    auth_service: AuthServiceDep,
     ip: ClientIP,
     refresh_token: str | None = Cookie(None),
 ) -> TokenResponse:
@@ -85,8 +83,7 @@ async def refresh_token(
     """
     if not refresh_token:
         raise TokenError("Refresh token required")
-    return await AuthService.refresh_tokens(
-        db,
+    return await auth_service.refresh_tokens(
         refresh_token,
         ip_address = ip
     )
@@ -99,7 +96,7 @@ async def refresh_token(
 )
 async def logout(
     response: Response,
-    db: DBSession,
+    auth_service: AuthServiceDep,
     refresh_token: str | None = Cookie(None),
 ) -> None:
     """
@@ -107,21 +104,21 @@ async def logout(
     """
     if not refresh_token:
         raise TokenError("Refresh token required")
-    await AuthService.logout(db, refresh_token)
+    await auth_service.logout(refresh_token)
     clear_refresh_cookie(response)
 
 
 @router.post("/logout-all", responses = {**AUTH_401})
 async def logout_all(
     response: Response,
-    db: DBSession,
+    auth_service: AuthServiceDep,
     current_user: CurrentUser,
 ) -> dict[str,
           int]:
     """
     Logout from all devices
     """
-    count = await AuthService.logout_all(db, current_user)
+    count = await auth_service.logout_all(current_user)
     clear_refresh_cookie(response)
     return {"revoked_sessions": count}
 
@@ -140,15 +137,14 @@ async def get_current_user(current_user: CurrentUser) -> UserResponse:
     responses = {**AUTH_401}
 )
 async def change_password(
-    db: DBSession,
+    user_service: UserServiceDep,
     current_user: CurrentUser,
     data: PasswordChange,
 ) -> None:
     """
     Change current user password
     """
-    await UserService.change_password(
-        db,
+    await user_service.change_password(
         current_user,
         data.current_password,
         data.new_password,

@@ -17,10 +17,7 @@ from config import (
     settings,
     UserRole,
 )
-from core.dependencies import (
-    DBSession,
-    RequireRole,
-)
+from core.dependencies import RequireRole
 from core.responses import (
     AUTH_401,
     CONFLICT_409,
@@ -34,7 +31,7 @@ from user.schemas import (
     UserUpdateAdmin,
 )
 from user.User import User
-from user.service import UserService
+from user.dependencies import UserServiceDep
 
 
 router = APIRouter(prefix = "/admin", tags = ["admin"])
@@ -51,7 +48,7 @@ AdminOnly = Annotated[User, Depends(RequireRole(UserRole.ADMIN))]
     },
 )
 async def list_users(
-    db: DBSession,
+    user_service: UserServiceDep,
     _: AdminOnly,
     page: int = Query(default = 1,
                       ge = 1),
@@ -64,7 +61,7 @@ async def list_users(
     """
     List all users (admin only)
     """
-    return await UserService.list_users(db, page, size)
+    return await user_service.list_users(page, size)
 
 
 @router.post(
@@ -78,14 +75,14 @@ async def list_users(
     },
 )
 async def create_user(
-    db: DBSession,
+    user_service: UserServiceDep,
     _: AdminOnly,
     user_data: AdminUserCreate,
 ) -> UserResponse:
     """
     Create a new user (admin only, bypasses registration)
     """
-    return await UserService.admin_create_user(db, user_data)
+    return await user_service.admin_create_user(user_data)
 
 
 @router.get(
@@ -98,14 +95,14 @@ async def create_user(
     },
 )
 async def get_user(
-    db: DBSession,
+    user_service: UserServiceDep,
     _: AdminOnly,
     user_id: UUID,
 ) -> UserResponse:
     """
     Get user by ID (admin only)
     """
-    return await UserService.get_user_by_id(db, user_id)
+    return await user_service.get_user_by_id(user_id)
 
 
 @router.patch(
@@ -119,7 +116,7 @@ async def get_user(
     },
 )
 async def update_user(
-    db: DBSession,
+    user_service: UserServiceDep,
     _: AdminOnly,
     user_id: UUID,
     user_data: UserUpdateAdmin,
@@ -127,7 +124,7 @@ async def update_user(
     """
     Update user (admin only)
     """
-    return await UserService.admin_update_user(db, user_id, user_data)
+    return await user_service.admin_update_user(user_id, user_data)
 
 
 @router.delete(
@@ -140,11 +137,11 @@ async def update_user(
     },
 )
 async def delete_user(
-    db: DBSession,
+    user_service: UserServiceDep,
     _: AdminOnly,
     user_id: UUID,
 ) -> None:
     """
     Delete user (admin only, hard delete)
     """
-    await UserService.admin_delete_user(db, user_id)
+    await user_service.admin_delete_user(user_id)

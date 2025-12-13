@@ -18,13 +18,11 @@ from core.exceptions import BaseAppException
 from core.logging import configure_logging
 from core.rate_limit import limiter
 from middleware.correlation import CorrelationIdMiddleware
-from schemas.common import AppInfoResponse
-from routes import (
-    admin_router,
-    auth_router,
-    health_router,
-    user_router,
-)
+from core.common_schemas import AppInfoResponse
+from core.health_routes import router as health_router
+from user.routes import router as user_router
+from auth.routes import router as auth_router
+from admin.routes import router as admin_router
 
 
 @asynccontextmanager

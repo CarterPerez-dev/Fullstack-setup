@@ -33,9 +33,11 @@ class AuthService:
     """
     Business logic for authentication operations
     """
-    @staticmethod
+    def __init__(self, session: AsyncSession) -> None:
+        self.session = session
+
     async def authenticate(
-        session: AsyncSession,
+        self,
         email: str,
         password: str,
         device_id: str | None = None,
@@ -47,7 +49,7 @@ class AuthService:
         """
         Authenticate user and create tokens
         """
-        user = await UserRepository.get_by_email(session, email)
+        user = await UserRepository.get_by_email(self.session, email)
         hashed_password = user.hashed_password if user else None
 
         is_valid, new_hash = await verify_password_with_timing_safety(
@@ -61,7 +63,7 @@ class AuthService:
             raise InvalidCredentials()
 
         if new_hash:
-            await UserRepository.update_password(session, user, new_hash)
+            await UserRepository.update_password(self.session, user, new_hash)
 
         access_token = create_access_token(user.id, user.token_version)
 
@@ -69,7 +71,7 @@ class AuthService:
         raw_refresh, token_hash, expires_at = create_refresh_token(user.id, family_id)
 
         await RefreshTokenRepository.create_token(
-            session,
+            self.session,
             user_id = user.id,
             token_hash = token_hash,
             family_id = family_id,
@@ -81,9 +83,8 @@ class AuthService:
 
         return access_token, raw_refresh, user
 
-    @staticmethod
     async def login(
-        session: AsyncSession,
+        self,
         email: str,
         password: str,
         device_id: str | None = None,
@@ -94,8 +95,7 @@ class AuthService:
         """
         Login and return tokens with user data
         """
-        access_token, refresh_token, user = await AuthService.authenticate(
-            session,
+        access_token, refresh_token, user = await self.authenticate(
             email,
             password,
             device_id,
@@ -109,9 +109,8 @@ class AuthService:
         )
         return response, refresh_token
 
-    @staticmethod
     async def refresh_tokens(
-        session: AsyncSession,
+        self,
         refresh_token: str,
         device_id: str | None = None,
         device_name: str | None = None,
@@ -124,7 +123,7 @@ class AuthService:
         """
         token_hash = hash_token(refresh_token)
         stored_token = await RefreshTokenRepository.get_by_hash(
-            session,
+            self.session,
             token_hash
         )
 
@@ -133,7 +132,7 @@ class AuthService:
 
         if stored_token.is_revoked:
             await RefreshTokenRepository.revoke_family(
-                session,
+                self.session,
                 stored_token.family_id
             )
             raise TokenRevokedError()
@@ -142,13 +141,13 @@ class AuthService:
             raise TokenError(message = "Refresh token expired")
 
         user = await UserRepository.get_by_id(
-            session,
+            self.session,
             stored_token.user_id
         )
         if user is None or not user.is_active:
             raise TokenError(message = "User not found or inactive")
 
-        await RefreshTokenRepository.revoke_token(session, stored_token)
+        await RefreshTokenRepository.revoke_token(self.session, stored_token)
 
         access_token = create_access_token(user.id, user.token_version)
 
@@ -157,7 +156,7 @@ class AuthService:
         )
 
         await RefreshTokenRepository.create_token(
-            session,
+            self.session,
             user_id = user.id,
             token_hash = new_hash,
             family_id = stored_token.family_id,
@@ -169,9 +168,8 @@ class AuthService:
 
         return TokenResponse(access_token = access_token)
 
-    @staticmethod
     async def logout(
-        session: AsyncSession,
+        self,
         refresh_token: str,
     ) -> None:
         """
@@ -181,19 +179,18 @@ class AuthService:
         """
         token_hash = hash_token(refresh_token)
         stored_token = await RefreshTokenRepository.get_by_hash(
-            session,
+            self.session,
             token_hash
         )
 
         if stored_token and not stored_token.is_revoked:
             await RefreshTokenRepository.revoke_token(
-                session,
+                self.session,
                 stored_token
             )
 
-    @staticmethod
     async def logout_all(
-        session: AsyncSession,
+        self,
         user: User,
     ) -> int:
         """
@@ -201,8 +198,8 @@ class AuthService:
 
         Returns count of revoked sessions
         """
-        await UserRepository.increment_token_version(session, user)
+        await UserRepository.increment_token_version(self.session, user)
         return await RefreshTokenRepository.revoke_all_user_tokens(
-            session,
+            self.session,
             user.id
         )

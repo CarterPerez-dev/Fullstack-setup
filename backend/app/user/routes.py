@@ -10,10 +10,7 @@ from fastapi import (
     status,
 )
 
-from core.dependencies import (
-    CurrentUser,
-    DBSession,
-)
+from core.dependencies import CurrentUser
 from core.responses import (
     AUTH_401,
     CONFLICT_409,
@@ -24,7 +21,7 @@ from .schemas import (
     UserResponse,
     UserUpdate,
 )
-from .service import UserService
+from .dependencies import UserServiceDep
 
 
 router = APIRouter(prefix = "/users", tags = ["users"])
@@ -37,13 +34,13 @@ router = APIRouter(prefix = "/users", tags = ["users"])
     responses = {**CONFLICT_409},
 )
 async def create_user(
-    db: DBSession,
+    user_service: UserServiceDep,
     user_data: UserCreate,
 ) -> UserResponse:
     """
     Register a new user
     """
-    return await UserService.create_user(db, user_data)
+    return await user_service.create_user(user_data)
 
 
 @router.get(
@@ -55,14 +52,14 @@ async def create_user(
     },
 )
 async def get_user(
-    db: DBSession,
+    user_service: UserServiceDep,
     user_id: UUID,
     _: CurrentUser,
 ) -> UserResponse:
     """
     Get user by ID
     """
-    return await UserService.get_user_by_id(db, user_id)
+    return await user_service.get_user_by_id(user_id)
 
 
 @router.patch(
@@ -71,11 +68,11 @@ async def get_user(
     responses = {**AUTH_401},
 )
 async def update_current_user(
-    db: DBSession,
+    user_service: UserServiceDep,
     current_user: CurrentUser,
     user_data: UserUpdate,
 ) -> UserResponse:
     """
     Update current user profile
     """
-    return await UserService.update_user(db, current_user, user_data)
+    return await user_service.update_user(current_user, user_data)

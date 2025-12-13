@@ -11,8 +11,10 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from config import settings
-from models import Base
+from core.Base import Base
 from core.enums import SafeEnum
+from user.User import User
+from auth.RefreshToken import RefreshToken
 
 
 config = context.config
