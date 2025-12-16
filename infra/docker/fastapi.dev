@@ -16,7 +16,8 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     UV_COMPILE_BYTECODE=0 \
-    UV_LINK_MODE=copy
+    UV_LINK_MODE=copy \
+    PYTHONPATH=/app/app
 
 COPY pyproject.toml uv.lock* ./
 
@@ -30,4 +31,4 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "uv run alembic upgrade head && uv run uvicorn src.__main__:app --host 0.0.0.0 --port 8000 --reload"]
+CMD ["sh", "-c", "uv run alembic upgrade head && uv run uvicorn __main__:app --host 0.0.0.0 --port 8000 --reload"]

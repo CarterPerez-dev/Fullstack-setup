@@ -40,13 +40,14 @@ RUN groupadd -g 1001 appgroup && \
 WORKDIR /app
 
 COPY --from=builder --chown=appuser:appgroup /app/.venv /app/.venv
-COPY --from=builder --chown=appuser:appgroup /app/src /app/src
+COPY --from=builder --chown=appuser:appgroup /app/app /app/app
 COPY --from=builder --chown=appuser:appgroup /app/alembic /app/alembic
 COPY --from=builder --chown=appuser:appgroup /app/alembic.ini /app/alembic.ini
 
 ENV PATH="/app/.venv/bin:$PATH" \
     PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app/app
 
 USER appuser
 
@@ -55,4 +56,4 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
 
-CMD ["sh", "-c", "alembic upgrade head && gunicorn src.__main__:app --worker-class uvicorn.workers.UvicornWorker --workers 4 --bind 0.0.0.0:8000 --max-requests 1000 --max-requests-jitter 100 --access-logfile - --error-logfile -"]
+CMD ["sh", "-c", "alembic upgrade head && gunicorn __main__:app --worker-class uvicorn.workers.UvicornWorker --workers 4 --bind 0.0.0.0:8000 --max-requests 1000 --max-requests-jitter 100 --access-logfile - --error-logfile -"]

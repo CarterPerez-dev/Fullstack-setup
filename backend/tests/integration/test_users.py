@@ -6,7 +6,7 @@ test_users.py
 import pytest
 from httpx import AsyncClient
 
-from src.models.User import User
+from user.User import User
 
 
 URL_USERS = "/v1/admin/users"

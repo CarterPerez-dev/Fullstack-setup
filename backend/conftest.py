@@ -27,16 +27,16 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.pool import StaticPool
 
-from src.core.security import (
+from core.security import (
     hash_password,
     create_access_token,
 )
-from src.config import UserRole
-from src.core.database import get_db_session
+from config import UserRole
+from core.database import get_db_session
 
-from src.models.Base import Base
-from src.models.User import User
-from src.models.RefreshToken import RefreshToken
+from core.Base import Base
+from user.User import User
+from auth.RefreshToken import RefreshToken
 
 
 @pytest_asyncio.fixture(scope = "session", loop_scope = "session")
@@ -83,7 +83,7 @@ async def client(db_session: AsyncSession) -> AsyncIterator[AsyncClient]:
     """
     Async HTTP client with DB session override
     """
-    from src.__main__ import app
+    from __main__ import app
 
     async def override_get_db():
         yield db_session

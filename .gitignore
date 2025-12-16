@@ -6,7 +6,6 @@ venv
 *.env
 *.cache
 *.egg
-.angela
 
 __pycache__/
 *.py[cod]
