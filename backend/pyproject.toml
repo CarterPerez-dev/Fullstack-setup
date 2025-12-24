@@ -167,7 +167,6 @@ load-plugins = [
     "pylint_per_file_ignores", 
 ]
 persistent = true
-suggestion-mode = true
 ignore = [
     "alembic",
     "venv",
@@ -219,6 +218,7 @@ disable = [
 [tool.pylint-per-file-ignores]
 "alembic/env.py" = "no-member"
 "conftest.py" = "import-outside-toplevel"
+"app/__main__.py" = "pointless-string-statement"
 
 [tool.pylint.format]
 max-line-length = 95

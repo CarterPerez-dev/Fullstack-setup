@@ -23,7 +23,7 @@ type ModalState =
   | { type: 'delete'; user: UserResponse }
 
 export function Component(): React.ReactElement {
-  const [page, setPage] = useState(PAGINATION.DEFAULT_PAGE)
+  const [page, setPage] = useState<number>(PAGINATION.DEFAULT_PAGE)
   const [modal, setModal] = useState<ModalState>({ type: 'closed' })
 
   const { data, isLoading } = useAdminUsers({
