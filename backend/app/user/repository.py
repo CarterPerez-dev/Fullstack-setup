@@ -7,6 +7,7 @@ from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from config import UserRole
 from .User import User
 from core.base_repository import BaseRepository
 
@@ -63,6 +64,7 @@ class UserRepository(BaseRepository[User]):
         email: str,
         hashed_password: str,
         full_name: str | None = None,
+        role: UserRole = UserRole.USER,
     ) -> User:
         """
         Create a new user
@@ -71,6 +73,7 @@ class UserRepository(BaseRepository[User]):
             email = email,
             hashed_password = hashed_password,
             full_name = full_name,
+            role = role,
         )
         session.add(user)
         await session.flush()

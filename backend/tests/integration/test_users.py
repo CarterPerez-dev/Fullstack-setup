@@ -9,12 +9,17 @@ from httpx import AsyncClient
 from user.User import User
 
 
-URL_USERS = "/v1/admin/users"
+URL_USERS = "/v1/users"
+URL_ADMIN_USERS = "/v1/admin/users"
 URL_USER_ME = "/v1/users/me"
 
 
 def url_user_by_id(user_id: str) -> str:
     return f"{URL_USERS}/{user_id}"
+
+
+def url_admin_user_by_id(user_id: str) -> str:
+    return f"{URL_ADMIN_USERS}/{user_id}"
 
 
 @pytest.mark.asyncio
@@ -179,7 +184,7 @@ async def test_list_users_admin_only(
     Non admin cannot list users (403).
     """
     response = await client.get(
-        URL_USERS,
+        URL_ADMIN_USERS,
         headers = auth_headers,
     )
 
@@ -197,7 +202,7 @@ async def test_list_users_as_admin(
     Admin can list users with pagination
     """
     response = await client.get(
-        URL_USERS,
+        URL_ADMIN_USERS,
         headers = admin_auth_headers,
     )
 
@@ -221,7 +226,7 @@ async def test_list_users_pagination(
     Pagination params work correctly
     """
     response = await client.get(
-        URL_USERS,
+        URL_ADMIN_USERS,
         headers = admin_auth_headers,
         params = {
             "page": 1,

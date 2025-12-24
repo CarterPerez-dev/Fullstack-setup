@@ -2,29 +2,30 @@
 // © AngelaMos | 2025
 // config.ts
 // ===================
+const API_VERSION = 'v1'
 
 export const API_ENDPOINTS = {
   AUTH: {
-    LOGIN: '/auth/login',
-    REFRESH: '/auth/refresh',
-    LOGOUT: '/auth/logout',
-    LOGOUT_ALL: '/auth/logout-all',
-    ME: '/auth/me',
-    CHANGE_PASSWORD: '/auth/change-password',
+    LOGIN: `/${API_VERSION}/auth/login`,
+    REFRESH: `/${API_VERSION}/auth/refresh`,
+    LOGOUT: `/${API_VERSION}/auth/logout`,
+    LOGOUT_ALL: `/${API_VERSION}/auth/logout-all`,
+    ME: `/${API_VERSION}/auth/me`,
+    CHANGE_PASSWORD: `/${API_VERSION}/auth/change-password`,
   },
   USERS: {
-    BASE: '/users',
-    BY_ID: (id: string) => `/users/${id}`,
-    ME: '/users/me',
-    REGISTER: '/users',
+    BASE: `/${API_VERSION}/users`,
+    BY_ID: (id: string) => `/${API_VERSION}/users/${id}`,
+    ME: `/${API_VERSION}/users/me`,
+    REGISTER: `/${API_VERSION}/users`,
   },
   ADMIN: {
     USERS: {
-      LIST: '/admin/users',
-      CREATE: '/admin/users',
-      BY_ID: (id: string) => `/admin/users/${id}`,
-      UPDATE: (id: string) => `/admin/users/${id}`,
-      DELETE: (id: string) => `/admin/users/${id}`,
+      LIST: `/${API_VERSION}/admin/users`,
+      CREATE: `/${API_VERSION}/admin/users`,
+      BY_ID: (id: string) => `/${API_VERSION}/admin/users/${id}`,
+      UPDATE: (id: string) => `/${API_VERSION}/admin/users/${id}`,
+      DELETE: (id: string) => `/${API_VERSION}/admin/users/${id}`,
     },
   },
 } as const

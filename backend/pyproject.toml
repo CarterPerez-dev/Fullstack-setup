@@ -1,7 +1,7 @@
 [project]
 name = "full-stack-template"
 version = "1.0.0"
-description = "Production grade FastAPI template with async SQLAlchemy and JWT auth"
+description = "FastAPI template with async SQLAlchemy and JWT auth"
 requires-python = ">=3.12"
 
 dependencies = [
@@ -34,6 +34,9 @@ dev = [
     "mypy>=1.19.0",
     "types-redis>=4.6.0",
     "ruff>=0.14.8",
+    "pylint>=4.0.4",
+    "pylint-pydantic>=0.4.1",
+    "pylint-per-file-ignores>=3.2.0",
     "ty>=0.0.1a32",
     "pre-commit>=4.2.0",
 ]
@@ -105,7 +108,7 @@ warn_unused_ignores = true
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
 plugins = ["pydantic.mypy"]
-exclude = ["alembic"]
+exclude = ["alembic", ".venv", "venv"]
 
 [[tool.mypy.overrides]]
 module = ["tests.*", "conftest"]
@@ -250,13 +253,13 @@ exclude_lines = [
 
 
 [tool.ty.src]
-include = ["src", "tests"]
+include = ["app", "tests"]
 exclude = ["alembic/versions/**", ".venv/**"]
 respect-ignore-files = true
 
 [tool.ty.environment]
 python-version = "3.12"
-root = ["./src"]
+root = ["./app"]
 python = "./.venv"
 
 [tool.ty.rules]
@@ -273,7 +276,7 @@ unresolved-reference = "warn"
 invalid-argument-type = "warn"
 
 [[tool.ty.overrides]]
-include = ["src/repositories/**", "src/services/**"]
+include = ["app/repositories/**", "app/services/**"]
 [tool.ty.overrides.rules]
 unresolved-attribute = "warn"
 

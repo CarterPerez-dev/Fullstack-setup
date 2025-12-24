@@ -124,8 +124,8 @@ export const useAdminCreateUser = (): UseMutationResult<
 
   return useMutation({
     mutationFn: performAdminCreateUser,
-    onSuccess: (): void => {
-      void queryClient.invalidateQueries({ queryKey: adminQueries.users.all() })
+    onSuccess: async (): Promise<void> => {
+      await queryClient.invalidateQueries({ queryKey: adminQueries.users.all() })
 
       toast.success(USER_SUCCESS_MESSAGES.CREATED)
     },
@@ -172,10 +172,13 @@ export const useAdminUpdateUser = (): UseMutationResult<
 
   return useMutation({
     mutationFn: performAdminUpdateUser,
-    onSuccess: (data: UserResponse, variables: AdminUpdateUserParams): void => {
+    onSuccess: async (
+      data: UserResponse,
+      variables: AdminUpdateUserParams
+    ): Promise<void> => {
       queryClient.setQueryData(adminQueries.users.byId(variables.id), data)
 
-      void queryClient.invalidateQueries({ queryKey: adminQueries.users.all() })
+      await queryClient.invalidateQueries({ queryKey: adminQueries.users.all() })
 
       toast.success(USER_SUCCESS_MESSAGES.UPDATED)
     },
@@ -198,10 +201,10 @@ export const useAdminDeleteUser = (): UseMutationResult<void, Error, string> => 
 
   return useMutation({
     mutationFn: performAdminDeleteUser,
-    onSuccess: (_, id: string): void => {
+    onSuccess: async (_, id: string): Promise<void> => {
       queryClient.removeQueries({ queryKey: adminQueries.users.byId(id) })
 
-      void queryClient.invalidateQueries({ queryKey: adminQueries.users.all() })
+      await queryClient.invalidateQueries({ queryKey: adminQueries.users.all() })
 
       toast.success(USER_SUCCESS_MESSAGES.DELETED)
     },

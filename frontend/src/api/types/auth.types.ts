@@ -6,16 +6,18 @@
 import { z } from 'zod'
 import { PASSWORD_CONSTRAINTS } from '@/config'
 
-export enum UserRole {
-  UNKNOWN = 'unknown',
-  USER = 'user',
-  ADMIN = 'admin',
-}
+export const UserRole = {
+  UNKNOWN: 'unknown',
+  USER: 'user',
+  ADMIN: 'admin',
+} as const
+
+export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 export const userResponseSchema = z.object({
   id: z.string().uuid(),
   created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
+  updated_at: z.string().datetime().nullable(),
   email: z.string().email(),
   full_name: z.string().nullable(),
   is_active: z.boolean(),
@@ -106,12 +108,12 @@ export const isValidLogoutAllResponse = (
 }
 
 export class AuthResponseError extends Error {
-  constructor(
-    message: string,
-    public readonly endpoint?: string
-  ) {
+  readonly endpoint?: string
+
+  constructor(message: string, endpoint?: string) {
     super(message)
     this.name = 'AuthResponseError'
+    this.endpoint = endpoint
     Object.setPrototypeOf(this, AuthResponseError.prototype)
   }
 }

@@ -1,0 +1,161 @@
+// ===================
+// © AngelaMos | 2025
+// landing.module.scss
+// ===================
+
+@use '@/styles' as *;
+
+.page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  @include flex-column-center;
+  background-color: $bg-default;
+  background-image: radial-gradient(
+    circle,
+    $bg-landing 1px,
+    transparent 1px
+  );
+  background-size: 20px 20px;
+  padding: $space-8;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: $space-5;
+}
+
+.title {
+  font-size: $font-size-4xl;
+  font-weight: $font-weight-semibold;
+  color: $text-default;
+  letter-spacing: $tracking-tight;
+  margin-bottom: $space-2;
+}
+
+.subtitle {
+  font-size: $font-size-lg;
+  color: $text-light;
+  margin-bottom: $space-3;
+}
+
+.github {
+  display: inline-flex;
+  color: $text-muted;
+  font-size: $font-size-2xl;
+  @include transition-fast;
+
+  @include hover {
+    &:hover {
+      color: $text-default;
+    }
+  }
+}
+
+.content {
+  max-width: 800px;
+  text-align: center;
+}
+
+.description {
+  font-size: $font-size-base;
+  color: $text-light;
+  line-height: $line-height-relaxed;
+  margin-bottom: $space-8;
+}
+
+.sections {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $space-6;
+  margin-bottom: $space-10;
+  text-align: left;
+
+  @include breakpoint-down(md) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.section {
+  padding: $space-5;
+  background-color: $bg-surface-75;
+  border: 1px solid $border-muted;
+  border-radius: $radius-lg;
+}
+
+.sectionTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $text-default;
+  margin-bottom: $space-3;
+  letter-spacing: $tracking-wide;
+  text-transform: uppercase;
+}
+
+.features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+
+  li {
+    font-size: $font-size-sm;
+    color: $text-muted;
+
+    &::before {
+      content: '→';
+      margin-right: $space-2;
+      color: $text-lighter;
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  gap: $space-3;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $space-3 $space-5;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $bg-default;
+  background-color: $text-default;
+  border-radius: $radius-md;
+  text-decoration: none;
+  @include transition-fast;
+
+  @include hover {
+    &:hover {
+      filter: brightness(0.9);
+    }
+  }
+}
+
+.buttonOutline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $space-3 $space-5;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $text-default;
+  background-color: transparent;
+  border: 1px solid $border-default;
+  border-radius: $radius-md;
+  text-decoration: none;
+  @include transition-fast;
+
+  @include hover {
+    &:hover {
+      border-color: $border-strong;
+      background-color: $bg-surface-75;
+    }
+  }
+}

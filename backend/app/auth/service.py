@@ -63,7 +63,11 @@ class AuthService:
             raise InvalidCredentials()
 
         if new_hash:
-            await UserRepository.update_password(self.session, user, new_hash)
+            await UserRepository.update_password(
+                self.session,
+                user,
+                new_hash
+            )
 
         access_token = create_access_token(user.id, user.token_version)
 
@@ -115,7 +119,7 @@ class AuthService:
         device_id: str | None = None,
         device_name: str | None = None,
         ip_address: str | None = None,
-    ) -> TokenResponse:
+    ) -> tuple[TokenResponse, str]:
         """
         Refresh access token using refresh token
 
@@ -147,11 +151,14 @@ class AuthService:
         if user is None or not user.is_active:
             raise TokenError(message = "User not found or inactive")
 
-        await RefreshTokenRepository.revoke_token(self.session, stored_token)
+        await RefreshTokenRepository.revoke_token(
+            self.session,
+            stored_token
+        )
 
         access_token = create_access_token(user.id, user.token_version)
 
-        _, new_hash, expires_at = create_refresh_token(
+        new_raw_token, new_hash, expires_at = create_refresh_token(
             user.id, stored_token.family_id
         )
 
@@ -166,7 +173,7 @@ class AuthService:
             ip_address = ip_address,
         )
 
-        return TokenResponse(access_token = access_token)
+        return TokenResponse(access_token = access_token), new_raw_token
 
     async def logout(
         self,

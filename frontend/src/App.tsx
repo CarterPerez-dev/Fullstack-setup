@@ -17,7 +17,18 @@ export default function App(): React.ReactElement {
     <QueryClientProvider client={queryClient}>
       <div className="app">
         <RouterProvider router={router} />
-        <Toaster richColors position="top-right" />
+        <Toaster
+          position="top-right"
+          duration={2000}
+          theme="dark"
+          toastOptions={{
+            style: {
+              background: 'hsl(0, 0%, 12.2%)',
+              border: '1px solid hsl(0, 0%, 18%)',
+              color: 'hsl(0, 0%, 98%)',
+            },
+          }}
+        />
       </div>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

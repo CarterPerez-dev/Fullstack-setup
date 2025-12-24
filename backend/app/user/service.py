@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import (
     AsyncSession,
 )
 
+from config import settings, UserRole
 from core.exceptions import (
     EmailAlreadyExists,
     InvalidCredentials,
@@ -43,8 +44,14 @@ class UserService:
         """
         Register a new user
         """
-        if await UserRepository.email_exists(self.session, user_data.email):
+        if await UserRepository.email_exists(self.session,
+                                             user_data.email):
             raise EmailAlreadyExists(user_data.email)
+
+        role = UserRole.USER
+        if settings.ADMIN_EMAIL and user_data.email.lower(
+        ) == settings.ADMIN_EMAIL.lower():
+            role = UserRole.ADMIN
 
         hashed = await hash_password(user_data.password)
         user = await UserRepository.create_user(
@@ -52,6 +59,7 @@ class UserService:
             email = user_data.email,
             hashed_password = hashed,
             full_name = user_data.full_name,
+            role = role,
         )
         return UserResponse.model_validate(user)
 
@@ -154,7 +162,8 @@ class UserService:
         """
         Admin creates a new user
         """
-        if await UserRepository.email_exists(self.session, user_data.email):
+        if await UserRepository.email_exists(self.session,
+                                             user_data.email):
             raise EmailAlreadyExists(user_data.email)
 
         hashed = await hash_password(user_data.password)
