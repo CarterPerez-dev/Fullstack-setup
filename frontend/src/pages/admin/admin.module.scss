@@ -1,0 +1,468 @@
+// ===================
+// © AngelaMos | 2025
+// admin.module.scss
+// ===================
+
+@use '@/styles' as *;
+
+.page {
+  padding: $space-6;
+  min-height: calc(100vh - 56px);
+  background-color: $bg-default;
+}
+
+.header {
+  @include flex-between;
+  margin-bottom: $space-6;
+}
+
+.title {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-semibold;
+  color: $text-default;
+}
+
+.createBtn {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-2 $space-4;
+  background-color: $white;
+  border: none;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $black;
+  cursor: pointer;
+  @include transition-fast;
+
+  @include hover {
+    filter: brightness(0.9);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.table {
+  width: 100%;
+  background: $bg-surface-100;
+  border: 1px solid $border-default;
+  border-radius: $radius-lg;
+  overflow: hidden;
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 100px;
+  gap: $space-4;
+  padding: $space-3 $space-4;
+  background: $bg-surface-200;
+  border-bottom: 1px solid $border-default;
+
+  @include breakpoint-down('md') {
+    display: none;
+  }
+}
+
+.tableHeaderCell {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  color: $text-lighter;
+  text-transform: uppercase;
+  letter-spacing: $tracking-wide;
+}
+
+.tableBody {
+  @include flex-column;
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 100px;
+  gap: $space-4;
+  padding: $space-3 $space-4;
+  border-bottom: 1px solid $border-default;
+  @include transition-fast;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  @include hover {
+    background: $bg-surface-75;
+  }
+
+  @include breakpoint-down('md') {
+    grid-template-columns: 1fr;
+    gap: $space-2;
+  }
+}
+
+.tableCell {
+  display: flex;
+  align-items: center;
+  font-size: $font-size-sm;
+  color: $text-default;
+  min-width: 0;
+
+  @include breakpoint-down('md') {
+    &::before {
+      content: attr(data-label);
+      font-size: $font-size-xs;
+      color: $text-lighter;
+      margin-right: $space-2;
+      min-width: 80px;
+    }
+  }
+}
+
+.email {
+  @include truncate;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+
+  &.admin {
+    background: $bg-selection;
+    color: $text-default;
+  }
+
+  &.user {
+    background: $bg-surface-200;
+    color: $text-light;
+  }
+
+  &.active {
+    background: hsl(142 76% 36% / 20%);
+    color: hsl(142, 76%, 46%);
+  }
+
+  &.inactive {
+    background: hsl(0 72% 51% / 20%);
+    color: $error-light;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: $space-2;
+  justify-content: flex-end;
+
+  @include breakpoint-down('md') {
+    justify-content: flex-start;
+  }
+}
+
+.actionBtn {
+  width: 32px;
+  height: 32px;
+  @include flex-center;
+  border: 1px solid $border-default;
+  border-radius: $radius-md;
+  background: transparent;
+  color: $text-light;
+  cursor: pointer;
+  @include transition-fast;
+
+  @include hover {
+    background: $bg-surface-200;
+    color: $text-default;
+  }
+
+  &.delete {
+    @include hover {
+      border-color: $error-default;
+      color: $error-default;
+    }
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.pagination {
+  @include flex-between;
+  padding: $space-4;
+  border-top: 1px solid $border-default;
+}
+
+.paginationInfo {
+  font-size: $font-size-sm;
+  color: $text-lighter;
+}
+
+.paginationBtns {
+  display: flex;
+  gap: $space-2;
+}
+
+.paginationBtn {
+  padding: $space-2 $space-3;
+  border: 1px solid $border-default;
+  border-radius: $radius-md;
+  background: transparent;
+  font-size: $font-size-sm;
+  color: $text-light;
+  cursor: pointer;
+  @include transition-fast;
+
+  @include hover {
+    background: $bg-surface-200;
+    color: $text-default;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.empty {
+  @include flex-column-center;
+  padding: $space-12;
+  color: $text-muted;
+  font-size: $font-size-sm;
+}
+
+.loading {
+  @include flex-center;
+  padding: $space-12;
+  color: $text-muted;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: $z-modal;
+  @include flex-center;
+}
+
+.modalOverlay {
+  @include absolute-fill;
+  background: rgb(0, 0, 0, 70%);
+}
+
+.modalContent {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin: $space-4;
+  background: $bg-surface-100;
+  border: 1px solid $border-default;
+  border-radius: $radius-lg;
+  padding: $space-6;
+}
+
+.modalHeader {
+  @include flex-between;
+  margin-bottom: $space-5;
+}
+
+.modalTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $text-default;
+}
+
+.modalClose {
+  width: 32px;
+  height: 32px;
+  @include flex-center;
+  border: none;
+  border-radius: $radius-md;
+  background: transparent;
+  color: $text-light;
+  cursor: pointer;
+  @include transition-fast;
+
+  @include hover {
+    background: $bg-surface-200;
+    color: $text-default;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.form {
+  @include flex-column;
+  gap: $space-4;
+}
+
+.field {
+  @include flex-column;
+  gap: $space-2;
+}
+
+.label {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $text-default;
+}
+
+.input {
+  width: 100%;
+  height: 44px;
+  padding: 0 $space-3;
+  background: transparent;
+  border: 1px solid $border-default;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $text-default;
+  @include transition-fast;
+
+  &::placeholder {
+    color: $text-muted;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $border-strong;
+  }
+}
+
+.select {
+  width: 100%;
+  height: 44px;
+  padding: 0 $space-3;
+  background: transparent;
+  border: 1px solid $border-default;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $text-default;
+  cursor: pointer;
+  @include transition-fast;
+
+  &:focus {
+    outline: none;
+    border-color: $border-strong;
+  }
+
+  option {
+    background: $bg-surface-100;
+    color: $text-default;
+  }
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  cursor: pointer;
+
+  input {
+    width: 18px;
+    height: 18px;
+    accent-color: $white;
+  }
+
+  span {
+    font-size: $font-size-sm;
+    color: $text-light;
+  }
+}
+
+.formActions {
+  display: flex;
+  gap: $space-3;
+  margin-top: $space-2;
+}
+
+.submitBtn {
+  flex: 1;
+  height: 44px;
+  @include flex-center;
+  background: $white;
+  border: none;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $black;
+  cursor: pointer;
+  @include transition-fast;
+
+  @include hover {
+    filter: brightness(0.9);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.cancelBtn {
+  flex: 1;
+  height: 44px;
+  @include flex-center;
+  background: transparent;
+  border: 1px solid $border-default;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $text-light;
+  cursor: pointer;
+  @include transition-fast;
+
+  @include hover {
+    background: $bg-surface-200;
+    color: $text-default;
+  }
+}
+
+.deleteConfirm {
+  @include flex-column;
+  gap: $space-4;
+}
+
+.deleteText {
+  font-size: $font-size-sm;
+  color: $text-light;
+  line-height: $line-height-relaxed;
+}
+
+.deleteEmail {
+  font-weight: $font-weight-medium;
+  color: $text-default;
+}
+
+.deleteBtn {
+  flex: 1;
+  height: 44px;
+  @include flex-center;
+  background: $error-default;
+  border: none;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $white;
+  cursor: pointer;
+  @include transition-fast;
+
+  @include hover {
+    filter: brightness(0.9);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

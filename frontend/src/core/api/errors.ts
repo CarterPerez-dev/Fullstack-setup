@@ -5,27 +5,36 @@
 
 import type { AxiosError } from 'axios'
 
-export enum ApiErrorCode {
-  NETWORK_ERROR = 'NETWORK_ERROR',
-  VALIDATION_ERROR = 'VALIDATION_ERROR',
-  AUTHENTICATION_ERROR = 'AUTHENTICATION_ERROR',
-  AUTHORIZATION_ERROR = 'AUTHORIZATION_ERROR',
-  NOT_FOUND = 'NOT_FOUND',
-  CONFLICT = 'CONFLICT',
-  RATE_LIMITED = 'RATE_LIMITED',
-  SERVER_ERROR = 'SERVER_ERROR',
-  UNKNOWN_ERROR = 'UNKNOWN_ERROR',
-}
+export const ApiErrorCode = {
+  NETWORK_ERROR: 'NETWORK_ERROR',
+  VALIDATION_ERROR: 'VALIDATION_ERROR',
+  AUTHENTICATION_ERROR: 'AUTHENTICATION_ERROR',
+  AUTHORIZATION_ERROR: 'AUTHORIZATION_ERROR',
+  NOT_FOUND: 'NOT_FOUND',
+  CONFLICT: 'CONFLICT',
+  RATE_LIMITED: 'RATE_LIMITED',
+  SERVER_ERROR: 'SERVER_ERROR',
+  UNKNOWN_ERROR: 'UNKNOWN_ERROR',
+} as const
+
+export type ApiErrorCode = (typeof ApiErrorCode)[keyof typeof ApiErrorCode]
 
 export class ApiError extends Error {
+  readonly code: ApiErrorCode
+  readonly statusCode: number
+  readonly details?: Record<string, string[]>
+
   constructor(
     message: string,
-    public readonly code: ApiErrorCode,
-    public readonly statusCode: number,
-    public readonly details?: Record<string, string[]>
+    code: ApiErrorCode,
+    statusCode: number,
+    details?: Record<string, string[]>
   ) {
     super(message)
     this.name = 'ApiError'
+    this.code = code
+    this.statusCode = statusCode
+    this.details = details
   }
 
   getUserMessage(): string {
@@ -56,14 +65,13 @@ interface ApiErrorResponse {
   message?: string
 }
 
-export function transformAxiosError(
-  error: AxiosError<ApiErrorResponse>
-): ApiError {
+export function transformAxiosError(error: AxiosError<unknown>): ApiError {
   if (!error.response) {
     return new ApiError('Network error', ApiErrorCode.NETWORK_ERROR, 0)
   }
 
-  const { status, data } = error.response
+  const { status } = error.response
+  const data = error.response.data as ApiErrorResponse | undefined
   let message = 'An error occurred'
   let details: Record<string, string[]> | undefined
 

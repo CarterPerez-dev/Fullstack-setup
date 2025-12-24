@@ -16,14 +16,14 @@
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: var(--color-bg);
+  background: $bg-default;
 }
 
 .app {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: var(--color-bg);
-  color: var(--color-text);
-  font-family: var(--font-sans);
+  background: $bg-default;
+  color: $text-default;
+  font-family: $font-sans;
 }

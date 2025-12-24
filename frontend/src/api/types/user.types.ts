@@ -92,12 +92,12 @@ export const isValidAdminUserCreateRequest = (
 }
 
 export class UserResponseError extends Error {
-  constructor(
-    message: string,
-    public readonly endpoint?: string
-  ) {
+  readonly endpoint?: string
+
+  constructor(message: string, endpoint?: string) {
     super(message)
     this.name = 'UserResponseError'
+    this.endpoint = endpoint
     Object.setPrototypeOf(this, UserResponseError.prototype)
   }
 }

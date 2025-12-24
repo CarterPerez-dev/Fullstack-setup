@@ -74,6 +74,7 @@ async def login(
     responses = {**AUTH_401}
 )
 async def refresh_token(
+    response: Response,
     auth_service: AuthServiceDep,
     ip: ClientIP,
     refresh_token: str | None = Cookie(None),
@@ -83,10 +84,12 @@ async def refresh_token(
     """
     if not refresh_token:
         raise TokenError("Refresh token required")
-    return await auth_service.refresh_tokens(
+    result, new_refresh_token = await auth_service.refresh_tokens(
         refresh_token,
         ip_address = ip
     )
+    set_refresh_cookie(response, new_refresh_token)
+    return result
 
 
 @router.post(

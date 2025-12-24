@@ -23,9 +23,7 @@ export default defineConfig(({ mode }) => {
 
     css: {
       preprocessorOptions: {
-        scss: {
-          api: 'modern-compiler',
-        },
+        scss: {},
       },
     },
 
@@ -42,15 +40,25 @@ export default defineConfig(({ mode }) => {
     },
 
     build: {
-      target: 'ES2022',
+      target: 'esnext',
+      cssTarget: 'chrome100',
       sourcemap: isDev ? true : 'hidden',
-      minify: 'esbuild',
+      minify: 'oxc',
       rollupOptions: {
         output: {
-          manualChunks: {
-            'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-            'vendor-query': ['@tanstack/react-query'],
-            'vendor-state': ['zustand'],
+          manualChunks(id: string): string | undefined {
+            if (id.includes('node_modules')) {
+              if (id.includes('react-dom') || id.includes('react-router')) {
+                return 'vendor-react'
+              }
+              if (id.includes('@tanstack/react-query')) {
+                return 'vendor-query'
+              }
+              if (id.includes('zustand')) {
+                return 'vendor-state'
+              }
+            }
+            return undefined
           },
         },
       },

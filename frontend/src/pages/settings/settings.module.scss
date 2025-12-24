@@ -1,0 +1,109 @@
+// ===================
+// © AngelaMos | 2025
+// settings.module.scss
+// ===================
+
+@use '@/styles' as *;
+
+.page {
+  min-height: calc(100vh - 56px);
+  padding: $space-6;
+  background-color: $bg-default;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: $space-8;
+}
+
+.title {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-semibold;
+  color: $text-default;
+  margin-bottom: $space-2;
+}
+
+.subtitle {
+  font-size: $font-size-sm;
+  color: $text-lighter;
+}
+
+.section {
+  margin-bottom: $space-8;
+}
+
+.sectionTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $text-light;
+  text-transform: uppercase;
+  letter-spacing: $tracking-wide;
+  margin-bottom: $space-4;
+}
+
+.grid {
+  display: grid;
+  gap: $space-4;
+
+  @include breakpoint-up('md') {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.card {
+  padding: $space-4;
+  background: $bg-surface-100;
+  border: 1px solid $border-default;
+  border-radius: $radius-lg;
+}
+
+.hookName {
+  display: inline-block;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $text-default;
+  background: $bg-surface-200;
+  padding: $space-1 $space-2;
+  border-radius: $radius-sm;
+  margin-bottom: $space-2;
+}
+
+.description {
+  font-size: $font-size-sm;
+  color: $text-light;
+  margin-bottom: $space-3;
+  line-height: $line-height-relaxed;
+}
+
+.meta {
+  @include flex-column;
+  gap: $space-1;
+}
+
+.file {
+  font-size: $font-size-xs;
+  color: $text-lighter;
+  font-family: $font-mono;
+}
+
+.endpoint {
+  font-size: $font-size-xs;
+  color: $text-muted;
+  font-family: $font-mono;
+}
+
+.list {
+  @include flex-column;
+  gap: $space-2;
+  padding-left: $space-5;
+  list-style: disc;
+
+  li {
+    font-size: $font-size-sm;
+    color: $text-light;
+  }
+}

@@ -8,6 +8,7 @@ from typing import Literal
 from functools import lru_cache
 
 from pydantic import (
+    EmailStr,
     Field,
     RedisDsn,
     SecretStr,
@@ -80,9 +81,9 @@ class Settings(BaseSettings):
 
     APP_NAME: str = "FastAPI Template"
     APP_VERSION: str = "1.0.0"
-    APP_SUMMARY: str = "FastAPI Backend Template"
-    APP_DESCRIPTION: str = "Async first boilerplate - JWT, Asyncdb, PostgreSQL"
-    APP_CONTACT_NAME: str = "AngelaMos"
+    APP_SUMMARY: str = "Developed CarterPerez-dev"
+    APP_DESCRIPTION: str = "FastAPI async first boilerplate - JWT, Asyncdb, PostgreSQL"
+    APP_CONTACT_NAME: str = "AngelaMos LLC"
     APP_CONTACT_EMAIL: str = "support@certgames.com"
     APP_LICENSE_NAME: str = "MIT"
     APP_LICENSE_URL: str = "https://github.com/CarterPerez-dev/fullstack-template/docs/templates/MIT"
@@ -104,6 +105,8 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: Literal["HS256", "HS384", "HS512"] = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(default = 15, ge = 5, le = 60)
     REFRESH_TOKEN_EXPIRE_DAYS: int = Field(default = 7, ge = 1, le = 30)
+
+    ADMIN_EMAIL: EmailStr | None = None
 
     REDIS_URL: RedisDsn | None = None
 

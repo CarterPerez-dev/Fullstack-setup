@@ -5,6 +5,11 @@ conftest.py
 Test configuration, fixtures, and factories
 """
 
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent / "app"))
+
 import hashlib
 import secrets
 from datetime import (
@@ -83,7 +88,9 @@ async def client(db_session: AsyncSession) -> AsyncIterator[AsyncClient]:
     """
     Async HTTP client with DB session override
     """
-    from __main__ import app
+    from factory import create_app
+
+    app = create_app()
 
     async def override_get_db():
         yield db_session

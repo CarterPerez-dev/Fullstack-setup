@@ -76,6 +76,16 @@ export default {
     'custom-property-empty-line-before': null,
 
     'no-descending-specificity': null,
+
+    'media-feature-name-no-unknown': [
+      true,
+      {
+        ignoreMediaFeatureNames: ['map'],
+      },
+    ],
+
+    'color-function-notation': null,
+    'hue-degree-notation': null,
   },
   ignoreFiles: [
     'node_modules/**',

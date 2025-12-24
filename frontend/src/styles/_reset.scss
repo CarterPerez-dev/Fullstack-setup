@@ -3,6 +3,9 @@
 // _reset.scss
 // ===================
 
+@use 'tokens' as *;
+@use 'fonts' as *;
+
 *,
 *::before,
 *::after {
@@ -33,11 +36,14 @@ html {
 body {
   min-height: 100vh;
   min-height: 100dvh;
-  line-height: 1.5;
+  line-height: $line-height-normal;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  background-color: $bg-default;
+  color: $text-default;
+  font-family: $font-sans;
 }
 
 h1,
@@ -46,9 +52,10 @@ h3,
 h4,
 h5,
 h6 {
-  line-height: 1.1;
+  line-height: $line-height-tight;
   text-wrap: balance;
   overflow-wrap: break-word;
+  font-weight: $font-weight-semibold;
 }
 
 p {
@@ -61,18 +68,9 @@ ol {
   list-style: none;
 }
 
-ul[role='list'],
-ol[role='list'] {
-  list-style: none;
-}
-
 a {
   color: inherit;
   text-decoration: none;
-}
-
-a:not([class]) {
-  text-decoration-skip-ink: auto;
 }
 
 img,
@@ -102,7 +100,7 @@ input[type='tel'],
 input[type='url'],
 textarea,
 select {
-  font-size: 1rem;
+  font-size: $font-size-sm;
   appearance: none;
 }
 
@@ -132,7 +130,7 @@ textarea:not([rows]) {
 }
 
 :focus-visible {
-  outline: 2px solid currentColor;
+  outline: 2px solid $border-strong;
   outline-offset: 2px;
 }
 
@@ -146,7 +144,7 @@ textarea:not([rows]) {
 
 [disabled] {
   cursor: not-allowed;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 dialog {
@@ -157,10 +155,6 @@ dialog {
 
 summary {
   cursor: pointer;
-}
-
-progress {
-  vertical-align: baseline;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -182,8 +176,8 @@ progress {
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -191,14 +185,14 @@ progress {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(255 255 255 / 20%);
-  border-radius: 4px;
+  background: $border-default;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(255 255 255 / 30%);
+  background: $border-strong;
 }
 
 ::selection {
-  background-color: rgb(255 255 255 / 20%);
+  background-color: $bg-selection;
 }

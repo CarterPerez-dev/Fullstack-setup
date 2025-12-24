@@ -11,22 +11,30 @@ import { Shell } from './shell'
 
 const routes: RouteObject[] = [
   {
+    path: ROUTES.HOME,
+    lazy: () => import('@/pages/landing'),
+  },
+  {
+    path: ROUTES.LOGIN,
+    lazy: () => import('@/pages/login'),
+  },
+  {
+    path: ROUTES.REGISTER,
+    lazy: () => import('@/pages/register'),
+  },
+  {
     element: <ProtectedRoute />,
     children: [
       {
         element: <Shell />,
         children: [
           {
-            path: ROUTES.HOME,
-            lazy: () => import('@/pages/home'),
-          },
-          {
             path: ROUTES.DASHBOARD,
-            lazy: () => import('@/pages/home'),
+            lazy: () => import('@/pages/dashboard'),
           },
           {
             path: ROUTES.SETTINGS,
-            lazy: () => import('@/pages/home'),
+            lazy: () => import('@/pages/settings'),
           },
         ],
       },
@@ -37,21 +45,22 @@ const routes: RouteObject[] = [
     children: [
       {
         element: <Shell />,
-        children: [],
+        children: [
+          {
+            path: ROUTES.ADMIN.USERS,
+            lazy: () => import('@/pages/admin'),
+          },
+        ],
       },
     ],
   },
   {
-    path: ROUTES.LOGIN,
-    lazy: () => import('@/pages/home'),
-  },
-  {
-    path: ROUTES.REGISTER,
-    lazy: () => import('@/pages/home'),
-  },
-  {
     path: ROUTES.UNAUTHORIZED,
-    lazy: () => import('@/pages/home'),
+    lazy: () => import('@/pages/landing'),
+  },
+  {
+    path: '*',
+    lazy: () => import('@/pages/landing'),
   },
 ]
 
