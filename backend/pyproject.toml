@@ -37,7 +37,7 @@ dev = [
     "pylint>=4.0.4",
     "pylint-pydantic>=0.4.1",
     "pylint-per-file-ignores>=3.2.0",
-    "ty>=0.0.1a32",
+    "ty>=0.0.8",
     "pre-commit>=4.2.0",
 ]
 
