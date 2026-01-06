@@ -180,7 +180,7 @@ def set_refresh_cookie(response: Response, token: str) -> None:
         secure = settings.ENVIRONMENT.value != "development",
         samesite = "strict",
         max_age = settings.REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60,
-        path = f"{API_PREFIX}/auth",
+        path = "/",
     )
 
 
@@ -190,5 +190,5 @@ def clear_refresh_cookie(response: Response) -> None:
     """
     response.delete_cookie(
         key = "refresh_token",
-        path = f"{API_PREFIX}/auth"
+        path = "/"
     )
