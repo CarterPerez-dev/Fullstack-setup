@@ -1,0 +1,32 @@
+# =============================================================================
+# AngelaMos | 2026
+# cloudflared.compose.yml
+# =============================================================================
+# Cloudflare Tunnel for production remote access
+# Usage: docker compose -f compose.yml -f cloudflared.compose.yml up -d
+# =============================================================================
+
+services:
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: ${APP_NAME:-fastapi-api}-tunnel
+    command: tunnel run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    networks:
+      - backend
+    depends_on:
+      api:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 128M
+        reservations:
+          cpus: '0.1'
+          memory: 32M
+    restart: unless-stopped
+
+networks:
+  backend:
+    external: true
+    name: ${APP_NAME:-fastapi-api}_backend

@@ -1,0 +1,66 @@
+{
+  "name": "YOUR_APP_SLUG",
+  "version": "1.0.0",
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "ios": "expo start --ios",
+    "android": "expo start --android",
+    "web": "expo start --web",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "check": "biome check . && tsc --noEmit"
+  },
+  "dependencies": {
+    "@react-native-community/netinfo": "^11.4.1",
+    "@tamagui/config": "^1.144.1",
+    "@tamagui/font-inter": "^1.144.1",
+    "@tamagui/react-native-media-driver": "^1.144.1",
+    "@tamagui/shorthands": "^1.144.1",
+    "@tamagui/toast": "^1.144.1",
+    "@tanstack/query-async-storage-persister": "^5.90.18",
+    "@tanstack/react-query": "^5.90.16",
+    "@tanstack/react-query-persist-client": "^5.90.18",
+    "axios": "^1.13.2",
+    "burnt": "^0.13.0",
+    "expo": "~54.0.31",
+    "expo-constants": "~18.0.13",
+    "expo-haptics": "~15.0.8",
+    "expo-linking": "~8.0.11",
+    "expo-local-authentication": "~17.0.8",
+    "expo-router": "~6.0.21",
+    "expo-secure-store": "~15.0.8",
+    "expo-splash-screen": "~31.0.13",
+    "expo-status-bar": "~3.0.9",
+    "lucide-react-native": "^0.562.0",
+    "react": "19.1.0",
+    "react-native": "0.81.5",
+    "react-native-gesture-handler": "~2.28.0",
+    "react-native-mmkv": "^4.1.1",
+    "react-native-reanimated": "~4.1.1",
+    "react-native-safe-area-context": "~5.6.2",
+    "react-native-worklets": "^0.7.1",
+    "react-native-screens": "~4.16.0",
+    "react-native-svg": "15.12.1",
+    "tamagui": "^1.144.1",
+    "zod": "^4.3.5",
+    "zustand": "^5.0.9"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.5",
+    "@biomejs/biome": "^2.3.11",
+    "@tamagui/babel-plugin": "^1.144.1",
+    "@types/react": "~19.1.10",
+    "babel-plugin-module-resolver": "^5.0.2",
+    "typescript": "~5.9.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "react": "19.1.0",
+      "react-dom": "19.1.0"
+    }
+  },
+  "private": true
+}

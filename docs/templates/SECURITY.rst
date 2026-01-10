@@ -2,7 +2,7 @@
 Security Policy
 ==================
 
-**xyz.com | ©xyz | 2025**
+**xyz.com | ©xyz | 2026**
 
 ----
 

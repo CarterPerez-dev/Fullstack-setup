@@ -1,0 +1,171 @@
+// ===================
+// © AngelaMos | 2025
+// login.module.scss
+// ===================
+
+@use '@/styles' as *;
+
+.page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  @include flex-center;
+  background-color: $bg-default;
+  background-image: radial-gradient(
+    circle,
+    $bg-page 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+  padding: $space-4;
+}
+
+.card {
+  width: 100%;
+  max-width: 400px;
+  background-color: $black;
+  background-image: radial-gradient(
+    circle,
+    $bg-card 1px,
+    transparent 1px
+  );
+  background-size: 20px 20px;
+  border: 1px solid $border-default;
+  border-radius: $radius-lg;
+  padding: $space-8;
+}
+
+.header {
+  margin-bottom: $space-6;
+}
+
+.title {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-semibold;
+  color: $white;
+  margin-bottom: $space-2;
+}
+
+.subtitle {
+  font-size: $font-size-sm;
+  color: $text-light;
+}
+
+.form {
+  @include flex-column;
+  gap: $space-5;
+}
+
+.field {
+  @include flex-column;
+  gap: $space-2;
+}
+
+.label {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $white;
+}
+
+.input {
+  width: 100%;
+  height: 48px;
+  padding: 0 $space-4;
+  background-color: transparent;
+  border: 1px solid $border-default;
+  border-radius: $radius-md;
+  font-size: $font-size-base;
+  color: $white;
+  @include transition-fast;
+
+  &::placeholder {
+    color: $text-muted;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $border-strong;
+  }
+
+  &[aria-invalid='true'] {
+    border-color: $error-default;
+  }
+}
+
+.inputWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.eyeButton {
+  position: absolute;
+  right: $space-3;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: $text-muted;
+  cursor: pointer;
+  padding: $space-1;
+  @include transition-fast;
+
+  &:hover {
+    color: $white;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.error {
+  font-size: $font-size-xs;
+  color: $error-default;
+}
+
+.submit {
+  width: 100%;
+  height: 48px;
+  margin-top: $space-2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $white;
+  border: none;
+  border-radius: $radius-md;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: $black;
+  cursor: pointer;
+  @include transition-fast;
+
+  @include hover {
+    filter: brightness(0.9);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.footer {
+  margin-top: $space-6;
+  text-align: center;
+  font-size: $font-size-sm;
+  color: $text-light;
+}
+
+.link {
+  color: $text-default;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  @include transition-fast;
+
+  @include hover {
+    color: $text-light;
+  }
+}

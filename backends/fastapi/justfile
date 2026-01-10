@@ -1,0 +1,285 @@
+# =============================================================================
+# AngelaMos | 2026
+# justfile
+# =============================================================================
+# Standalone FastAPI Backend
+# =============================================================================
+
+set dotenv-filename := ".env.development"
+set dotenv-load
+set export
+set shell := ["bash", "-uc"]
+set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
+
+project := file_name(justfile_directory())
+version := `git describe --tags --always 2>/dev/null || echo "dev"`
+
+# =============================================================================
+# Default
+# =============================================================================
+
+default:
+    @just --list --unsorted
+
+# =============================================================================
+# Linting and Formatting
+# =============================================================================
+
+[group('lint')]
+ruff *ARGS:
+    ruff check app/ {{ARGS}}
+
+[group('lint')]
+ruff-fix:
+    ruff check app/ --fix
+    ruff format app/
+
+[group('lint')]
+ruff-format:
+    ruff format app/
+
+[group('lint')]
+pylint *ARGS:
+    pylint app/ {{ARGS}}
+
+[group('lint')]
+lint: ruff
+
+# =============================================================================
+# Type Checking
+# =============================================================================
+
+[group('types')]
+mypy *ARGS:
+    mypy app/ {{ARGS}}
+
+[group('types')]
+ty *ARGS:
+    ty check {{ARGS}}
+
+[group('types')]
+typecheck: mypy
+
+# =============================================================================
+# Testing
+# =============================================================================
+
+[group('test')]
+pytest *ARGS:
+    pytest tests/ {{ARGS}}
+
+[group('test')]
+test: pytest
+
+[group('test')]
+test-cov:
+    pytest tests/ --cov=app --cov-report=term-missing --cov-report=html
+
+# =============================================================================
+# CI / Quality
+# =============================================================================
+
+[group('ci')]
+ci: lint typecheck test
+
+[group('ci')]
+check: ruff mypy
+
+# =============================================================================
+# Docker Compose (Production)
+# =============================================================================
+
+[group('prod')]
+up *ARGS:
+    docker compose --env-file .env up {{ARGS}}
+
+[group('prod')]
+start *ARGS:
+    docker compose --env-file .env up -d {{ARGS}}
+
+[group('prod')]
+down *ARGS:
+    docker compose --env-file .env down {{ARGS}}
+
+[group('prod')]
+stop:
+    docker compose --env-file .env stop
+
+[group('prod')]
+build *ARGS:
+    docker compose --env-file .env build {{ARGS}}
+
+[group('prod')]
+rebuild:
+    docker compose --env-file .env build --no-cache
+
+[group('prod')]
+logs *SERVICE:
+    docker compose --env-file .env logs -f {{SERVICE}}
+
+[group('prod')]
+ps:
+    docker compose --env-file .env ps
+
+[group('prod')]
+shell:
+    docker compose --env-file .env exec -it api /bin/bash
+
+# =============================================================================
+# Docker Compose (Production + Cloudflare Tunnel)
+# =============================================================================
+
+[group('tunnel')]
+tunnel-up *ARGS:
+    docker compose --env-file .env -f compose.yml -f cloudflared.compose.yml up {{ARGS}}
+
+[group('tunnel')]
+tunnel-start *ARGS:
+    docker compose --env-file .env -f compose.yml -f cloudflared.compose.yml up -d {{ARGS}}
+
+[group('tunnel')]
+tunnel-down *ARGS:
+    docker compose --env-file .env -f compose.yml -f cloudflared.compose.yml down {{ARGS}}
+
+[group('tunnel')]
+tunnel-logs:
+    docker compose --env-file .env -f compose.yml -f cloudflared.compose.yml logs -f cloudflared
+
+# =============================================================================
+# Docker Compose (Development)
+# =============================================================================
+
+[group('dev')]
+dev-up *ARGS:
+    docker compose -f dev.compose.yml up {{ARGS}}
+
+[group('dev')]
+dev-start *ARGS:
+    docker compose -f dev.compose.yml up -d {{ARGS}}
+
+[group('dev')]
+dev-down *ARGS:
+    docker compose -f dev.compose.yml down {{ARGS}}
+
+[group('dev')]
+dev-stop:
+    docker compose -f dev.compose.yml stop
+
+[group('dev')]
+dev-build *ARGS:
+    docker compose -f dev.compose.yml build {{ARGS}}
+
+[group('dev')]
+dev-rebuild:
+    docker compose -f dev.compose.yml build --no-cache
+
+[group('dev')]
+dev-logs *SERVICE:
+    docker compose -f dev.compose.yml logs -f {{SERVICE}}
+
+[group('dev')]
+dev-ps:
+    docker compose -f dev.compose.yml ps
+
+[group('dev')]
+dev-shell:
+    docker compose -f dev.compose.yml exec -it api /bin/bash
+
+# =============================================================================
+# Database (Production)
+# =============================================================================
+
+[group('db')]
+migrate *ARGS:
+    docker compose --env-file .env exec api alembic upgrade {{ARGS}}
+
+[group('db')]
+migration message:
+    docker compose --env-file .env exec api alembic revision --autogenerate -m "{{message}}"
+
+[group('db')]
+rollback:
+    docker compose --env-file .env exec api alembic downgrade -1
+
+[group('db')]
+db-history:
+    docker compose --env-file .env exec api alembic history --verbose
+
+[group('db')]
+db-current:
+    docker compose --env-file .env exec api alembic current
+
+# =============================================================================
+# Database (Development)
+# =============================================================================
+
+[group('db-dev')]
+dev-migrate *ARGS:
+    docker compose -f dev.compose.yml exec api alembic upgrade {{ARGS}}
+
+[group('db-dev')]
+dev-migration message:
+    docker compose -f dev.compose.yml exec api alembic revision --autogenerate -m "{{message}}"
+
+[group('db-dev')]
+dev-rollback:
+    docker compose -f dev.compose.yml exec api alembic downgrade -1
+
+# =============================================================================
+# Database (Local - no Docker)
+# =============================================================================
+
+[group('db-local')]
+migrate-local *ARGS:
+    uv run alembic upgrade {{ARGS}}
+
+[group('db-local')]
+migration-local message:
+    uv run alembic revision --autogenerate -m "{{message}}"
+
+[group('db-local')]
+rollback-local:
+    uv run alembic downgrade -1
+
+[group('db-local')]
+db-history-local:
+    uv run alembic history --verbose
+
+[group('db-local')]
+db-current-local:
+    uv run alembic current
+
+# =============================================================================
+# Local Development (no Docker)
+# =============================================================================
+
+[group('local')]
+run:
+    uv run uvicorn app.__main__:app --host 0.0.0.0 --port 8000 --reload
+
+[group('local')]
+sync:
+    uv sync
+
+[group('local')]
+sync-dev:
+    uv sync --all-extras
+
+# =============================================================================
+# Utilities
+# =============================================================================
+
+[group('util')]
+info:
+    @echo "Project: {{project}}"
+    @echo "Version: {{version}}"
+    @echo "OS: {{os()}} ({{arch()}})"
+
+[group('util')]
+clean:
+    -rm -rf .mypy_cache
+    -rm -rf .pytest_cache
+    -rm -rf .ruff_cache
+    -rm -rf htmlcov
+    -rm -rf .coverage
+    @echo "Cache directories cleaned"

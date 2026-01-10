@@ -1,0 +1,138 @@
+# =============================================================================
+# AngelaMos | 2026
+# justfile
+# =============================================================================
+
+set dotenv-load
+set export
+set shell := ["bash", "-uc"]
+set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
+
+project := file_name(justfile_directory())
+version := `git describe --tags --always 2>/dev/null || echo "dev"`
+
+# =============================================================================
+# Default
+# =============================================================================
+
+default:
+    @just --list --unsorted
+
+# =============================================================================
+# Development
+# =============================================================================
+
+[group('dev')]
+start:
+    npx expo start
+
+[group('dev')]
+ios:
+    npx expo start --ios
+
+[group('dev')]
+clear:
+    npx expo start --clear
+
+# =============================================================================
+# Linting and Formatting
+# =============================================================================
+
+[group('lint')]
+lint:
+    npm run lint
+
+[group('lint')]
+lint-fix:
+    npm run lint:fix
+
+[group('lint')]
+format:
+    npm run format
+
+# =============================================================================
+# Type Checking
+# =============================================================================
+
+[group('types')]
+typecheck:
+    npm run typecheck
+
+[group('types')]
+tsc *ARGS:
+    npx tsc {{ARGS}}
+
+# =============================================================================
+# Quality
+# =============================================================================
+
+[group('ci')]
+check:
+    npm run check
+
+[group('ci')]
+ci: lint typecheck
+
+# =============================================================================
+# EAS Build
+# =============================================================================
+
+[group('eas')]
+build-dev:
+    eas build --profile development --platform ios
+
+[group('eas')]
+build-dev-device:
+    eas build --profile development:device --platform ios
+
+[group('eas')]
+build-preview:
+    eas build --profile preview --platform ios
+
+[group('eas')]
+build-prod:
+    eas build --profile production --platform ios
+
+[group('eas')]
+submit:
+    eas submit --platform ios
+
+# =============================================================================
+# Setup / Placeholders
+# =============================================================================
+
+[group('setup')]
+placeholders:
+    @echo "Finding all YOUR_ placeholders..."
+    @grep -rn "YOUR_" --include="*.ts" --include="*.tsx" --include="*.json" --exclude-dir=node_modules . || echo "No placeholders found"
+
+[group('setup')]
+install:
+    npm install
+
+[group('setup')]
+reinstall:
+    rm -rf node_modules
+    npm install
+
+# =============================================================================
+# Utilities
+# =============================================================================
+
+[group('util')]
+info:
+    @echo "Project: {{project}}"
+    @echo "Version: {{version}}"
+    @echo "OS: {{os()}} ({{arch()}})"
+
+[group('util')]
+clean:
+    -rm -rf .expo
+    -rm -rf node_modules/.cache
+    @echo "Cache directories cleaned"
+
+[group('util')]
+nuke:
+    -rm -rf node_modules
+    -rm -rf .expo
+    @echo "Nuked node_modules and .expo"

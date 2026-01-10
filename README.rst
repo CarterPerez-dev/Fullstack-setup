@@ -1,8 +1,25 @@
 ===========================================
-Fullstack Template: FastAPI + React + Nginx
+Fullstack Templates Collection
 ===========================================
 
-*Production-ready Docker setup with TypeScript and SCSS*
+*Production-ready stack templates with TypeScript, SCSS, and modern backends*
+
+Available Templates
+===================
+
+**Default Stack: FastAPI + React**
+  Full-stack web application with Python FastAPI backend and React 19 frontend.
+  Uses ``compose.yml`` and ``dev.compose.yml``.
+
+**Go-Chi Stack: Go + React**
+  Full-stack web application with Go Chi backend and React 19 frontend.
+  Uses ``compose.go.yml`` and ``dev.compose.go.yml``.
+  Backend located in ``alternate-backends/go-chi/``.
+
+**iOS Mobile: Expo + React Native**
+  Mobile application using Expo and React Native.
+  Located in ``mobile/ios-expo/``.
+  Connects to any backend via API (no Docker required).
 
 ----
 
@@ -63,9 +80,23 @@ This will:
 Next Steps
 ----------
 
+**For FastAPI + React (Default)**
+
 1. Edit ``.env`` with your configuration
-2. Start development: ``just dev-up``
+2. Start development: ``just dev-up`` or ``docker compose -f dev.compose.yml up``
 3. After creating models: ``just migration-local "initial"`` then ``just migrate-local head``
+
+**For Go-Chi + React**
+
+1. Edit ``.env`` with your configuration
+2. Start development: ``docker compose -f dev.compose.go.yml up``
+3. Production: ``docker compose -f compose.go.yml up``
+
+**For iOS Expo App**
+
+1. Navigate to ``mobile/ios-expo/``
+2. Follow the iOS-specific README for Expo setup
+3. Configure API endpoint to connect to your backend
 
 Run ``just`` to see all available commands.
 

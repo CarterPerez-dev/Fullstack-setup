@@ -1,0 +1,29 @@
+# AngelaMos | 2026
+# .air.toml - Hot reload configuration
+
+root = "."
+tmp_dir = "tmp"
+
+[build]
+cmd = "go build -o ./tmp/main ./cmd/api"
+bin = "tmp/main"
+full_bin = "./tmp/main"
+include_ext = ["go", "yaml", "yml"]
+exclude_dir = ["tmp", "vendor", "bin", "keys", "migrations"]
+exclude_regex = ["_test\\.go"]
+delay = 1000
+stop_on_error = true
+send_interrupt = true
+kill_delay = 500
+
+[log]
+time = false
+
+[color]
+main = "cyan"
+watcher = "magenta"
+build = "yellow"
+runner = "green"
+
+[misc]
+clean_on_exit = true

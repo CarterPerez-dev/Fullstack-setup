@@ -1,0 +1,88 @@
+# =============================================================================
+# AngelaMos | 2026
+# dev.compose.yml
+# =============================================================================
+# Development compose - FastAPI + PostgreSQL + Redis (standalone API)
+# Uses .env.development (different ports than production)
+# =============================================================================
+
+name: ${APP_NAME:-fastapi-api}-dev
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: infra/docker/fastapi.dev
+    container_name: ${APP_NAME:-fastapi-api}-backend-dev
+    ports:
+      - "${API_HOST_PORT:-8501}:8000"
+    volumes:
+      - .:/app
+      - venv_cache:/app/.venv
+    env_file:
+      - .env.development
+    environment:
+      - ENVIRONMENT=development
+      - DEBUG=true
+      - RELOAD=true
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+  db:
+    image: postgres:17-alpine
+    container_name: ${APP_NAME:-fastapi-api}-db-dev
+    ports:
+      - "${POSTGRES_HOST_PORT:-5501}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-app_db}
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-app_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: ${APP_NAME:-fastapi-api}-redis-dev
+    ports:
+      - "${REDIS_HOST_PORT:-6501}:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  venv_cache:
