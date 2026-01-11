@@ -1,0 +1,53 @@
+# AngelaMos | 2026
+# config.yaml - Default configuration
+
+app:
+  name: "Go Backend Template"
+  version: "1.0.0"
+
+server:
+  host: "0.0.0.0"
+  port: 8080
+  read_timeout: 30s
+  write_timeout: 30s
+  idle_timeout: 120s
+  shutdown_timeout: 15s
+
+database:
+  max_open_conns: 25
+  max_idle_conns: 5
+  conn_max_lifetime: 1h
+  conn_max_idle_time: 30m
+
+redis:
+  pool_size: 10
+  min_idle_conns: 5
+
+jwt:
+  access_token_expire: 15m
+  refresh_token_expire: 168h
+  issuer: "go-backend"
+
+rate_limit:
+  requests: 100
+  window: 1m
+  burst: 20
+
+cors:
+  allowed_origins:
+    - "http://localhost:3000"
+    - "http://localhost:3420"
+  allowed_methods:
+    - "GET"
+    - "POST"
+    - "PUT"
+    - "PATCH"
+    - "DELETE"
+    - "OPTIONS"
+  allowed_headers:
+    - "Accept"
+    - "Authorization"
+    - "Content-Type"
+    - "X-Request-ID"
+  allow_credentials: true
+  max_age: 300

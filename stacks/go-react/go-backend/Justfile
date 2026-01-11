@@ -1,0 +1,110 @@
+# AngelaMos | 2026
+# Justfile
+
+set dotenv-load := true
+
+# Default recipe
+default:
+    @just --list
+
+# Development
+# -----------
+
+# Run the API server with hot reload (requires air)
+dev:
+    air -c .air.toml
+
+# Run the API server without hot reload
+run:
+    go run ./cmd/api
+
+# Build the binary
+build:
+    CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o bin/api ./cmd/api
+
+# Run tests
+test:
+    go test -v -race -coverprofile=coverage.out ./...
+
+# Run tests with coverage report
+test-coverage: test
+    go tool cover -html=coverage.out -o coverage.html
+
+# Run linter
+lint:
+    golangci-lint run --timeout=5m
+
+# Format code
+fmt:
+    gofumpt -w .
+    goimports -w .
+
+# Tidy dependencies
+tidy:
+    go mod tidy
+
+# Database
+# --------
+
+# Run database migrations
+migrate-up:
+    goose -dir migrations postgres "${DATABASE_URL}" up
+
+# Rollback last migration
+migrate-down:
+    goose -dir migrations postgres "${DATABASE_URL}" down
+
+# Check migration status
+migrate-status:
+    goose -dir migrations postgres "${DATABASE_URL}" status
+
+# Create new migration
+migrate-create name:
+    goose -dir migrations create {{name}} sql
+
+# Docker
+# ------
+
+# Start development containers
+up:
+    docker compose -f dev.compose.yml up -d
+
+# Stop development containers
+down:
+    docker compose -f dev.compose.yml down
+
+# View container logs
+logs:
+    docker compose -f dev.compose.yml logs -f
+
+# Rebuild and restart containers
+rebuild:
+    docker compose -f dev.compose.yml up -d --build
+
+# Build production image
+docker-build:
+    docker build -t go-backend:latest .
+
+# Keys
+# ----
+
+# Generate ES256 keypair for JWT signing
+generate-keys:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    mkdir -p keys
+    openssl ecparam -genkey -name prime256v1 -noout -out keys/private.pem
+    openssl ec -in keys/private.pem -pubout -out keys/public.pem
+    chmod 600 keys/private.pem
+    echo "ES256 keypair generated in keys/"
+
+# Clean
+# -----
+
+# Remove build artifacts
+clean:
+    rm -rf bin/ coverage.out coverage.html tmp/
+
+# Full clean including containers
+clean-all: clean
+    docker compose -f dev.compose.yml down -v

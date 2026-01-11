@@ -1,0 +1,44 @@
+# AngelaMos | 2026
+# .gitignore
+
+# Binaries
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test
+*.test
+coverage.out
+coverage.html
+
+# Build
+tmp/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Keys (sensitive)
+keys/*.pem
+keys/*.key
+
+# Vendor (if using)
+vendor/
+
+# Debug
+__debug_bin*

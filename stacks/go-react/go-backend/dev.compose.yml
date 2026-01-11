@@ -1,0 +1,45 @@
+# AngelaMos | 2026
+# dev.compose.yml - Development compose
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    ports:
+      - "5447:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: app
+    volumes:
+      - pgdata_dev:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6022:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redisdata_dev:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.54
+    ports:
+      - "16686:16686"
+      - "4317:4317"
+      - "4318:4318"
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"
+
+volumes:
+  pgdata_dev:
+  redisdata_dev:
