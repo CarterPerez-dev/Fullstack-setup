@@ -41,7 +41,7 @@ services:
     restart: unless-stopped
 
   db:
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     container_name: ${APP_NAME:-fastapi-api}-db-dev
     ports:
       - "${POSTGRES_HOST_PORT:-5501}:5432"

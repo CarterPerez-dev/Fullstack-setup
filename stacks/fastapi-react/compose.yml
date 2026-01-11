@@ -74,7 +74,7 @@ services:
     restart: unless-stopped
 
   db:
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     container_name: ${APP_NAME:-fastapi-react}-db
     ports:
       - "${POSTGRES_HOST_PORT:-4426}:5432"

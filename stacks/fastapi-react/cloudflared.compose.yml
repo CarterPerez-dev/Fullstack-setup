@@ -25,8 +25,3 @@ services:
           cpus: '0.1'
           memory: 32M
     restart: unless-stopped
-
-networks:
-  backend:
-    external: true
-    name: ${APP_NAME:-fastapi-react}_backend
