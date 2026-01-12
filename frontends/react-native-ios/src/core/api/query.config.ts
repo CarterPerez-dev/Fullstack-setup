@@ -6,7 +6,7 @@
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query'
 import { QUERY_CONFIG } from '@/core/config'
-import { queryClientMMKVStorage } from '@/core/storage'
+import { queryClientStorage } from '@/core/storage'
 import { ApiError, ApiErrorCode } from './errors'
 
 const NO_RETRY_ERROR_CODES: readonly ApiErrorCode[] = [
@@ -111,6 +111,6 @@ export const queryClient = new QueryClient({
 })
 
 export const queryClientPersister = createAsyncStoragePersister({
-  storage: queryClientMMKVStorage,
+  storage: queryClientStorage,
   key: 'query-cache',
 })

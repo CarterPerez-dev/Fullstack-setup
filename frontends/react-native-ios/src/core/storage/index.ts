@@ -1,7 +1,7 @@
-/**
- * @AngelaMos | 2026
- * index.ts
- */
+// ===================
+// © AngelaMos | 2026
+// index.ts
+// ===================
 
-export * from './mmkv.storage'
 export * from './secure.storage'
+export * from './app.storage'

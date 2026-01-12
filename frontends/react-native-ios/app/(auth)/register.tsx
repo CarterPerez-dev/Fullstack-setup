@@ -3,13 +3,6 @@
  * register.tsx
  */
 
-import { Link, router } from 'expo-router'
-import { ArrowLeft } from 'lucide-react-native'
-import type React from 'react'
-import { useState } from 'react'
-import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native'
-import { Stack, Text, YStack } from 'tamagui'
-import { z } from 'zod'
 import { useRegister } from '@/api/hooks'
 import { userCreateRequestSchema } from '@/api/types'
 import { PASSWORD_CONSTRAINTS } from '@/core/config'
@@ -23,11 +16,17 @@ import {
   CardHeader,
   CardSubtitle,
   CardTitle,
+  DottedBackground,
   Input,
   PasswordInput,
 } from '@/shared/components'
 import { haptics } from '@/shared/utils'
-import { colors } from '@/theme/tokens'
+import { Link, router } from 'expo-router'
+import type React from 'react'
+import { useState } from 'react'
+import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native'
+import { Stack, Text, YStack } from 'tamagui'
+import { z } from 'zod'
 
 const registerFormSchema = userCreateRequestSchema
   .extend({
@@ -84,37 +83,22 @@ export default function RegisterScreen(): React.ReactElement {
   }
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1 }}
-    >
-      <ScrollView
-        contentContainerStyle={{
-          flexGrow: 1,
-          justifyContent: 'center',
-          padding: 16,
-          backgroundColor: colors.bgDefault.val,
-        }}
-        keyboardShouldPersistTaps="handled"
+    <DottedBackground>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
       >
-        <Stack
-          position="absolute"
-          top="$6"
-          left="$6"
-          flexDirection="row"
-          alignItems="center"
-          gap="$2"
-          pressStyle={{ opacity: 0.7 }}
-          onPress={() => router.back()}
+        <ScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: 'center',
+            padding: 16,
+            paddingTop: 60,
+          }}
+          keyboardShouldPersistTaps="handled"
         >
-          <ArrowLeft size={16} color={colors.textLight.val} />
-          <Text fontSize={14} color="$textLight">
-            Home
-          </Text>
-        </Stack>
-
-        <YStack alignItems="center">
-          <Card>
+          <YStack alignItems="center">
+            <Card>
             <CardHeader>
               <CardTitle>Sign up</CardTitle>
               <CardSubtitle>Create a new account</CardSubtitle>
@@ -171,9 +155,10 @@ export default function RegisterScreen(): React.ReactElement {
                 </Link>
               </CardFooterText>
             </CardFooter>
-          </Card>
-        </YStack>
-      </ScrollView>
-    </KeyboardAvoidingView>
+            </Card>
+          </YStack>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </DottedBackground>
   )
 }

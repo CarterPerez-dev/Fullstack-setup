@@ -3,9 +3,10 @@
  * Button.tsx
  */
 
-import type React from 'react'
-import { type GetProps, Stack, styled, Text } from 'tamagui'
 import { haptics } from '@/shared/utils'
+import type React from 'react'
+import { type GetProps, styled } from 'tamagui'
+import { Stack, Text } from 'tamagui'
 
 const ButtonFrame = styled(Stack, {
   name: 'Button',
@@ -14,9 +15,9 @@ const ButtonFrame = styled(Stack, {
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'center',
-  height: 48,
+  height: 44,
   paddingHorizontal: '$4',
-  borderRadius: '$3',
+  borderRadius: '$2',
   cursor: 'pointer',
   pressStyle: {
     opacity: 0.9,
@@ -64,7 +65,7 @@ const ButtonFrame = styled(Stack, {
 
 const ButtonText = styled(Text, {
   name: 'ButtonText',
-  fontSize: 16,
+  fontSize: 14,
   fontWeight: '500',
   textAlign: 'center',
 

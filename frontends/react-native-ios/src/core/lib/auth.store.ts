@@ -7,7 +7,7 @@ import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { type UserResponse, UserRole } from '@/api/types'
 import { APP_CONFIG } from '@/core/config'
-import { zustandMMKVStorage } from '@/core/storage'
+import { zustandStorage } from '@/core/storage'
 
 interface AuthState {
   user: UserResponse | null
@@ -59,7 +59,7 @@ export const useAuthStore = create<AuthStore>()(
     }),
     {
       name: APP_CONFIG.AUTH_STORAGE_KEY,
-      storage: createJSONStorage(() => zustandMMKVStorage),
+      storage: createJSONStorage(() => zustandStorage),
       partialize: (state) =>
         ({
           user: state.user,
@@ -67,6 +67,7 @@ export const useAuthStore = create<AuthStore>()(
         }) as AuthStore,
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true)
+        state?.setLoading(false)
       },
     }
   )

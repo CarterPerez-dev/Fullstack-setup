@@ -10,7 +10,6 @@ export const APP_CONFIG = {
 
   KEYCHAIN_SERVICE: 'com.yourcompany.app.auth',
   AUTH_STORAGE_KEY: 'app-auth',
-  MMKV_STORAGE_ID: 'app-storage',
 
   ACCENT_COLOR: '#C15F3C',
 } as const

@@ -3,21 +3,19 @@
  * home.tsx
  */
 
+import { useCurrentUser } from '@/api/hooks'
+import { DottedBackground } from '@/shared/components'
 import type React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Stack, Text, YStack } from 'tamagui'
-import { useCurrentUser } from '@/api/hooks'
-import { colors } from '@/theme/tokens'
 
 export default function HomeScreen(): React.ReactElement {
   const { data: user } = useCurrentUser()
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: colors.bgDefault.val }}
-      edges={['top']}
-    >
-      <YStack flex={1} padding="$6">
+    <DottedBackground>
+      <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+        <YStack flex={1} padding="$6">
         <Stack marginBottom="$6">
           <Text
             fontSize={26}
@@ -43,7 +41,8 @@ export default function HomeScreen(): React.ReactElement {
             This is a template home screen. Customize it for your app.
           </Text>
         </Stack>
-      </YStack>
-    </SafeAreaView>
+        </YStack>
+      </SafeAreaView>
+    </DottedBackground>
   )
 }

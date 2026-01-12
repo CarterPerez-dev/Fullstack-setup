@@ -3,25 +3,20 @@
  * Input.tsx
  */
 
-import { forwardRef, type Ref } from 'react'
+import { type Ref, forwardRef } from 'react'
 import type { TextInput as RNTextInput } from 'react-native'
-import {
-  type GetProps,
-  Stack,
-  styled,
-  Input as TamaguiInput,
-  Text,
-} from 'tamagui'
+import { type GetProps, styled } from 'tamagui'
+import { Stack, Input as TamaguiInput, Text } from 'tamagui'
 
 const InputFrame = styled(TamaguiInput, {
   name: 'Input',
-  height: 48,
-  paddingHorizontal: '$4',
+  height: 44,
+  paddingHorizontal: '$3',
   backgroundColor: 'transparent',
   borderWidth: 1,
   borderColor: '$borderDefault',
-  borderRadius: '$3',
-  fontSize: 16,
+  borderRadius: '$2',
+  fontSize: 14,
   color: '$white',
   placeholderTextColor: '$textMuted',
   outlineWidth: 0,
@@ -50,7 +45,7 @@ const InputContainer = styled(Stack, {
 
 const Label = styled(Text, {
   name: 'Label',
-  fontSize: 14,
+  fontSize: 12,
   fontWeight: '500',
   color: '$white',
 })

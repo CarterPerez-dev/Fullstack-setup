@@ -3,15 +3,17 @@
  * settings.tsx
  */
 
+import { useCurrentUser, useLogout } from '@/api/hooks'
+import { useBiometricsEnabled, useUIStore } from '@/core/lib'
+import { DottedBackground } from '@/shared/components'
+import { getBiometricLabel, useBiometrics } from '@/shared/hooks'
+import { haptics } from '@/shared/utils'
+import { colors } from '@/theme/tokens'
+import { router } from 'expo-router'
 import { ChevronRight, LogOut, Shield, User } from 'lucide-react-native'
 import type React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Stack, Switch, Text, YStack } from 'tamagui'
-import { useCurrentUser, useLogout } from '@/api/hooks'
-import { useBiometricsEnabled, useUIStore } from '@/core/lib'
-import { getBiometricLabel, useBiometrics } from '@/shared/hooks'
-import { haptics } from '@/shared/utils'
-import { colors } from '@/theme/tokens'
 
 function SettingsRow({
   icon,
@@ -67,11 +69,9 @@ export default function SettingsScreen(): React.ReactElement {
   const canUseBiometrics = isAvailable && isEnrolled
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: colors.bgDefault.val }}
-      edges={['top']}
-    >
-      <YStack flex={1} padding="$6">
+    <DottedBackground>
+      <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+        <YStack flex={1} padding="$6">
         <Stack marginBottom="$6">
           <Text
             fontSize={26}
@@ -97,23 +97,30 @@ export default function SettingsScreen(): React.ReactElement {
           <SettingsRow
             icon={<User size={18} color={colors.textLight.val} />}
             label="Profile"
-            onPress={() => {}}
+            onPress={() => router.push('/(app)/profile')}
           />
 
           {canUseBiometrics && (
             <SettingsRow
               icon={<Shield size={18} color={colors.textLight.val} />}
-              label={getBiometricLabel(biometryType)}
+              label={`${getBiometricLabel(biometryType)} Lock`}
               rightElement={
                 <Switch
-                  size="$3"
+                  size="$4"
                   checked={biometricsEnabled}
                   onCheckedChange={handleBiometricsToggle}
-                  backgroundColor={
-                    biometricsEnabled ? '$accent' : '$bgSurface200'
-                  }
+                  backgroundColor={biometricsEnabled ? colors.accent.val : colors.bgSurface200.val}
+                  borderWidth={1}
+                  borderColor={biometricsEnabled ? colors.accent.val : colors.borderDefault.val}
+                  width={52}
+                  height={28}
                 >
-                  <Switch.Thumb backgroundColor="$white" />
+                  <Switch.Thumb
+                    backgroundColor={colors.white.val}
+                    animation="quick"
+                    width={24}
+                    height={24}
+                  />
                 </Switch>
               }
             />
@@ -133,7 +140,8 @@ export default function SettingsScreen(): React.ReactElement {
             onPress={handleLogout}
           />
         </Stack>
-      </YStack>
-    </SafeAreaView>
+        </YStack>
+      </SafeAreaView>
+    </DottedBackground>
   )
 }

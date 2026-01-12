@@ -5,7 +5,7 @@
 
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { zustandMMKVStorage } from '@/core/storage'
+import { zustandStorage } from '@/core/storage'
 
 interface UIState {
   biometricsEnabled: boolean
@@ -26,7 +26,7 @@ export const useUIStore = create<UIStore>()(
     }),
     {
       name: 'ui-storage',
-      storage: createJSONStorage(() => zustandMMKVStorage),
+      storage: createJSONStorage(() => zustandStorage),
     }
   )
 )

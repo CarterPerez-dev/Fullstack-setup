@@ -148,9 +148,12 @@ apiClient.interceptors.response.use(
 
     const isUnauthorized = error.response?.status === HTTP_STATUS.UNAUTHORIZED
     const isNotRetried = originalRequest._retry !== true
-    const isNotRefreshEndpoint = originalRequest.url?.includes('refresh') !== true
+    const isNotAuthEndpoint =
+      !originalRequest.url?.includes('refresh') &&
+      !originalRequest.url?.includes('login') &&
+      !originalRequest.url?.includes('register')
 
-    if (isUnauthorized && isNotRetried && isNotRefreshEndpoint) {
+    if (isUnauthorized && isNotRetried && isNotAuthEndpoint) {
       if (isRefreshing) {
         return new Promise<unknown>((resolve, reject) => {
           addRefreshSubscriber(
